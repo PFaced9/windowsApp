@@ -213,7 +213,7 @@ if __name__ == "__main__":
     def get_default_gst_path() -> Path:
         # If packaged by PyInstaller, read from the temporary bundle dir
         base = Path(getattr(sys, "_MEIPASS", Path(__file__).parent))
-        return base / "GST-Rates.xlsx"
+        return base / "GST-RatesNew.xlsx"
 
     parser = argparse.ArgumentParser(description="Add GST rates to an Item Master CSV using GST-Rates.xlsx")
     parser.add_argument("--input", help="Path to input Item Master CSV")
@@ -271,30 +271,32 @@ if __name__ == "__main__":
                     btn_run.config(state=tk.NORMAL)
 
             root = tk.Tk()
-            root.title("GST Rate Enricher")
-            root.geometry("560x260")
-            root.resizable(False, False)
+            root.title("GST Rate Change Calculator")
+            root.geometry("700x350")
+            root.resizable(True, True)
 
             inp_var = tk.StringVar()
             out_var = tk.StringVar()
             gst_var = tk.StringVar(value=str(default_gst_path))
             status_var = tk.StringVar(value=f"Using GST file: {Path(gst_var.get()).name}")
 
-            tk.Label(root, text="Item Master CSV:").place(x=20, y=20)
-            tk.Entry(root, textvariable=inp_var, width=60).place(x=140, y=20)
-            tk.Button(root, text="Browse", command=choose_input).place(x=460, y=16)
+            # Input CSV section
+            tk.Label(root, text="Item Master CSV:", font=("Arial", 10, "bold")).place(x=20, y=20)
+            tk.Entry(root, textvariable=inp_var, width=70, font=("Arial", 9)).place(x=20, y=45)
+            tk.Button(root, text="Browse", command=choose_input, width=10, font=("Arial", 9)).place(x=580, y=42)
 
-            tk.Label(root, text="Output CSV:").place(x=20, y=60)
-            tk.Entry(root, textvariable=out_var, width=60).place(x=140, y=60)
-            tk.Button(root, text="Save as", command=choose_output).place(x=460, y=56)
+            # Output CSV section
+            tk.Label(root, text="Output CSV:", font=("Arial", 10, "bold")).place(x=20, y=85)
+            tk.Entry(root, textvariable=out_var, width=70, font=("Arial", 9)).place(x=20, y=110)
+            tk.Button(root, text="Browse", command=choose_output, width=10, font=("Arial", 9)).place(x=580, y=107)
 
-            tk.Label(root, text="GST Rates file:").place(x=20, y=100)
-            tk.Entry(root, textvariable=gst_var, width=60, state="disabled").place(x=140, y=100)
+            # Run button
+            btn_run = tk.Button(root, text="Process Files", width=15, command=run_process, 
+                              font=("Arial", 10, "bold"), bg="#4CAF50", fg="white")
+            btn_run.place(x=20, y=150)
 
-            btn_run = tk.Button(root, text="Run", width=12, command=run_process)
-            btn_run.place(x=140, y=150)
-
-            tk.Label(root, textvariable=status_var, fg="gray").place(x=140, y=190)
+            # Status label
+            tk.Label(root, textvariable=status_var, fg="gray", font=("Arial", 9)).place(x=20, y=190)
 
             root.mainloop()
             raise SystemExit
