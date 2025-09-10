@@ -26,10 +26,11 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile add_gst_to_item_master.py --add-data "GST-Rates.xlsx;."
+          pyinstaller --onefile --windowed add_gst_to_item_master.py --add-data "GST-Rates.xlsx;."
 
-      - name: Upload EXE
+      - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gst_enricher_exe
-          path: dist/gst_enricher.exe
+          path: dist/*
+          if-no-files-found: warn
